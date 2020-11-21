@@ -78,28 +78,27 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                     .fit()
                     .centerCrop()
                     .into(productImageView);
-            productTitleTextView.setText(productCardModel.getTitle());
 
-            if(productCardModel.getPrice().getNonPromotional() == null) {
-                productNonPromotionalPriceTextView.setVisibility(View.GONE);
-            } else {
-                productNonPromotionalPriceTextView.setVisibility(View.VISIBLE);
-                productNonPromotionalPriceTextView.setText(productCardModel.getPrice().getNonPromotional());
-            }
+            setupTextView(productTitleTextView, productCardModel.getTitle());
+            setupTextView(productNonPromotionalPriceTextView, productCardModel.getPrice().getNonPromotional());
+            setupTextView(productPriceTextView, productCardModel.getPrice().getCurrent());
+            setupTextView(productInstallmentTextView, productCardModel.getPrice().getInstallment());
 
-            productPriceTextView.setText(productCardModel.getPrice().getCurrent());
-
-            if(productCardModel.getPrice().getInstallment() == null) {
-                productInstallmentTextView.setVisibility(View.GONE);
-            } else {
-                productInstallmentTextView.setVisibility(View.VISIBLE);
-                productInstallmentTextView.setText(productCardModel.getPrice().getInstallment());
-            }
             cardView.setOnClickListener(view -> {
                 Intent intent = new Intent(context, ProductActivity.class);
                 intent.putExtra(ProductActivity.URL, productCardModel.getLink());
                 context.startActivity(intent);
             });
+        }
+
+        private void setupTextView(TextView view, String value) {
+            if(value == null) {
+                view.setVisibility(View.GONE);
+                return;
+            }
+
+            view.setVisibility(View.VISIBLE);
+            view.setText(value);
         }
     }
 }
