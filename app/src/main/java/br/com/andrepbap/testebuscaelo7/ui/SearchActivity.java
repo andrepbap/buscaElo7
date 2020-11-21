@@ -1,15 +1,10 @@
 package br.com.andrepbap.testebuscaelo7.ui;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
@@ -31,24 +26,6 @@ public class SearchActivity extends AppCompatActivity implements SearchClient.Se
         setupToolbar();
         setupSearchView();
         setupBackButton();
-        handleSearchIntent();
-    }
-
-    private void handleSearchIntent() {
-        Intent intent = getIntent();
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            keepSearchFocusCleared();
-
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            searchView.setQuery(query, false);
-            new SearchClient().search("", this);
-        }
-    }
-
-    private void keepSearchFocusCleared() {
-        if(searchView != null) {
-            searchView.setFocusable(false);
-        }
     }
 
     private void setupBackButton() {
@@ -57,9 +34,20 @@ public class SearchActivity extends AppCompatActivity implements SearchClient.Se
     }
 
     private void setupSearchView() {
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) findViewById(R.id.search_view);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                new SearchClient().search("", SearchActivity.this);
+                searchView.clearFocus();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
     }
 
     private void setupToolbar() {
