@@ -2,6 +2,7 @@ package br.com.andrepbap.testebuscaelo7.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -62,7 +63,13 @@ public class SearchActivity extends AppCompatActivity implements
             return;
         }
 
+        refreshListWith(productCardModelList);
+    }
+
+    private void refreshListWith(List<ProductCardModel> productCardModelList) {
         productListAdapter.refreshWith(productCardModelList);
+        GridLayoutManager layoutManager = (GridLayoutManager) productListRecyclerView.getLayoutManager();
+        layoutManager.scrollToPositionWithOffset(0, 0);
     }
 
     @Override
