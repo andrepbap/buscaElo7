@@ -13,19 +13,25 @@ import java.util.List;
 import br.com.andrepbap.testebuscaelo7.R;
 import br.com.andrepbap.testebuscaelo7.model.ProductCardModel;
 import br.com.andrepbap.testebuscaelo7.network.search.SearchClient;
+import br.com.andrepbap.testebuscaelo7.ui.recyclerAdapter.ProductListAdapter;
 
 public class SearchActivity extends AppCompatActivity implements 
         SearchClient.SearchCallback,
         SearchView.OnQueryTextListener {
 
+    private static final String EMPTY_QUERY_FOR_MOCK_SEARCH = "";
+
     private SearchView searchView;
     private RecyclerView productListRecyclerView;
     private ProductListAdapter productListAdapter;
+    private SearchClient searchClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        searchClient = new SearchClient();
 
         setupToolbar();
         setupSearchView();
@@ -65,14 +71,14 @@ public class SearchActivity extends AppCompatActivity implements
     }
 
     @Override
-    public boolean onQueryTextSubmit(String s) {
-        new SearchClient().search("", SearchActivity.this);
+    public boolean onQueryTextSubmit(String query) {
+        searchClient.search(EMPTY_QUERY_FOR_MOCK_SEARCH, SearchActivity.this);
         searchView.clearFocus();
         return true;
     }
 
     @Override
-    public boolean onQueryTextChange(String s) {
+    public boolean onQueryTextChange(String query) {
         return false;
     }
 }
