@@ -20,16 +20,16 @@ public class SearchClient extends BaseClient<SearchService> {
                     @Override
                     public void onResponse(Call<List<ProductCardModel>> call, Response<List<ProductCardModel>> response) {
                         if(!response.isSuccessful()) {
-                            callback.error();
+                            callback.onSearchError();
                             return;
                         }
 
-                        callback.success(response.body());
+                        callback.onSearchSuccess(response.body());
                     }
 
                     @Override
                     public void onFailure(Call<List<ProductCardModel>> call, Throwable t) {
-                        callback.error();
+                        callback.onSearchError();
                     }
                 });
     }
@@ -40,7 +40,7 @@ public class SearchClient extends BaseClient<SearchService> {
     }
 
     public interface SearchCallback {
-        void success(List<ProductCardModel> productCardModelList);
-        void error();
+        void onSearchSuccess(List<ProductCardModel> productCardModelList);
+        void onSearchError();
     }
 }

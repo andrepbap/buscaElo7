@@ -18,7 +18,7 @@ import br.com.andrepbap.testebuscaelo7.R;
 import br.com.andrepbap.testebuscaelo7.model.ProductCardModel;
 
 public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.ProductCardViewHolder> {
-    private final List<ProductCardModel> productCardModelList;
+    private List<ProductCardModel> productCardModelList;
     private final Context context;
 
     public ProductListAdapter(Context context, List<ProductCardModel> productCardModelList) {
@@ -42,6 +42,11 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     @Override
     public int getItemCount() {
         return productCardModelList.size();
+    }
+
+    public void refreshWith(List<ProductCardModel> productCardModelList) {
+        this.productCardModelList = productCardModelList;
+        notifyDataSetChanged();
     }
 
     class ProductCardViewHolder extends RecyclerView.ViewHolder {

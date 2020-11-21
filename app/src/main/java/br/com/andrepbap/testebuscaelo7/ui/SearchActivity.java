@@ -14,9 +14,13 @@ import br.com.andrepbap.testebuscaelo7.R;
 import br.com.andrepbap.testebuscaelo7.model.ProductCardModel;
 import br.com.andrepbap.testebuscaelo7.network.search.SearchClient;
 
-public class SearchActivity extends AppCompatActivity implements SearchClient.SearchCallback {
+public class SearchActivity extends AppCompatActivity implements 
+        SearchClient.SearchCallback,
+        SearchView.OnQueryTextListener {
 
     private SearchView searchView;
+    private RecyclerView productListRecyclerView;
+    private ProductListAdapter productListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,19 +39,7 @@ public class SearchActivity extends AppCompatActivity implements SearchClient.Se
 
     private void setupSearchView() {
         searchView = (SearchView) findViewById(R.id.search_view);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                new SearchClient().search("", SearchActivity.this);
-                searchView.clearFocus();
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });
+        searchView.setOnQueryTextListener(this);
     }
 
     private void setupToolbar() {
@@ -56,13 +48,31 @@ public class SearchActivity extends AppCompatActivity implements SearchClient.Se
     }
 
     @Override
-    public void success(List<ProductCardModel> productCardModelList) {
-        RecyclerView productListRecyclerView = findViewById(R.id.product_list_recycler_view);
-        productListRecyclerView.setAdapter(new ProductListAdapter(this, productCardModelList));
+    public void onSearchSuccess(List<ProductCardModel> productCardModelList) {
+        if(productListRecyclerView == null) {
+            productListRecyclerView = findViewById(R.id.product_list_recycler_view);
+            productListAdapter = new ProductListAdapter(this, productCardModelList);
+            productListRecyclerView.setAdapter(productListAdapter);
+            return;
+        }
+
+        productListAdapter.refreshWith(productCardModelList);
     }
 
     @Override
-    public void error() {
+    public void onSearchError() {
 
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        new SearchClient().search("", SearchActivity.this);
+        searchView.clearFocus();
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        return false;
     }
 }
