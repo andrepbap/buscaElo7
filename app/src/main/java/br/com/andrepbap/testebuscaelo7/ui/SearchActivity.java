@@ -17,9 +17,9 @@ import br.com.andrepbap.testebuscaelo7.model.ProductCardModel;
 import br.com.andrepbap.testebuscaelo7.network.search.SearchClient;
 import br.com.andrepbap.testebuscaelo7.ui.recyclerAdapter.ProductListAdapter;
 
-public class SearchActivity extends AppCompatActivity implements 
-        SearchClient.SearchCallback,
-        SearchClient.SearchPaginateCallback,
+public class SearchActivity extends AppCompatActivity implements
+        SearchClient.OnSearchListener,
+        SearchClient.OnSearchPaginateListener,
         SearchView.OnQueryTextListener {
 
     private static final String EMPTY_QUERY_FOR_MOCK_SEARCH = "";
