@@ -12,4 +12,7 @@ public interface SearchService {
     @GET("api/1/products")
     Call<List<ProductCardModel>> search(@Query("q") String term);
 
+    @GET("api/1/products")
+    Call<List<ProductCardModel>> paginate(@Query("q") String term, @Query("page") int page);
+
 }

@@ -34,6 +34,26 @@ public class SearchClient extends BaseClient<SearchService> {
                 });
     }
 
+    public void paginate(String term, int page, SearchPaginateCallback callback) {
+        service.paginate(term, page)
+                .enqueue(new Callback<List<ProductCardModel>>() {
+                    @Override
+                    public void onResponse(Call<List<ProductCardModel>> call, Response<List<ProductCardModel>> response) {
+                        if(!response.isSuccessful()) {
+                            callback.onSearchPaginateError();
+                            return;
+                        }
+
+                        callback.onSearchPaginateSuccess(response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<ProductCardModel>> call, Throwable t) {
+                        callback.onSearchPaginateError();
+                    }
+                });
+    }
+
     @Override
     public Class<SearchService> getClazz() {
         return SearchService.class;
@@ -42,5 +62,10 @@ public class SearchClient extends BaseClient<SearchService> {
     public interface SearchCallback {
         void onSearchSuccess(List<ProductCardModel> productCardModelList);
         void onSearchError();
+    }
+
+    public interface SearchPaginateCallback {
+        void onSearchPaginateSuccess(List<ProductCardModel> productCardModelList);
+        void onSearchPaginateError();
     }
 }
